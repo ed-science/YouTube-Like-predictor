@@ -51,16 +51,14 @@ def get_url_list(new_lst_len,lst):
 
     for j in range(0,r,50):
 
-        if j==r-1:
-            v_id = ",".join(lst[j:])
-            # print len(v_id)
-        else:
-            v_id = ",".join(lst[j+0:j+50])
-            # print len(v_id)
-
+        v_id = ",".join(lst[j:]) if j==r-1 else ",".join(lst[j+0:j+50])
         k = random.randint(0,4)
         API_KEY = API_KEYS[k]
-        url = "https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id="+v_id+"&key="+API_KEY
+        url = (
+            f"https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id={v_id}&key="
+            + API_KEY
+        )
+
         url_list.append(url)
     return url_list
 

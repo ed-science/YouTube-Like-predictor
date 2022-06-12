@@ -24,8 +24,10 @@ def get_url(Video_urls):
     v_id =  ",".join(Video_urls)
     k = random.randint(0,4)
     API_KEY = API_KEYS[k]
-    url = "https://www.googleapis.com/youtube/v3/videos?part=status,snippet,topicDetails,contentDetails,statistics&id="+v_id+"&key="+API_KEY
-    return url
+    return (
+        f"https://www.googleapis.com/youtube/v3/videos?part=status,snippet,topicDetails,contentDetails,statistics&id={v_id}&key="
+        + API_KEY
+    )
 
 # This function populates the data dictionary
 def add_data(i,key1,key2,key3="NA"):
@@ -75,7 +77,11 @@ def channel_data():
 
     k = random.randint(0,4)
     API_KEY = API_KEYS[k]
-    url = "https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id="+channel_id+"&key="+API_KEY
+    url = (
+        f"https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id={channel_id}&key="
+        + API_KEY
+    )
+
     # print url
     r = requests.get(url)
     get_json = r.json()
@@ -89,13 +95,13 @@ def channel_data():
             add_data(i,key1="channel_videoCount",key2="statistics",key3="videoCount")
     else:
         for i in get_json["items"]:
-            channel_dict[i["id"]]={}
-            # add_data(i,key1="channelTitle",key2="snippet",key3="title")
-            # add_data(i,key1="ChannelDescription",key2="snippet",key3="description")
-            channel_dict[i["id"]]["ChannelPublishedAt"] = i["snippet"]["publishedAt"]
-            channel_dict[i["id"]]["channel_ViewCount"] = i["statistics"]["viewCount"]
-            channel_dict[i["id"]]["channel_subscriberCount"] = i["statistics"]["subscriberCount"]
-            channel_dict[i["id"]]["channel_videoCount"] = i["statistics"]["videoCount"]
+            channel_dict[i["id"]] = {
+                "ChannelPublishedAt": i["snippet"]["publishedAt"],
+                "channel_ViewCount": i["statistics"]["viewCount"],
+                "channel_subscriberCount": i["statistics"]["subscriberCount"],
+                "channel_videoCount": i["statistics"]["videoCount"],
+            }
+
         # print channel_dict
 
         for j in data["channelId"]:
